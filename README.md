@@ -1,147 +1,149 @@
 # ModForge
 
-Ein visueller Editor, der aus zusammengeklickten Items, Blöcken, Werkzeugen, Rüstungen und Rezepten
-ein vollständiges **NeoForge-Mod-Projekt für Minecraft 1.21.1** erzeugt — und es auf Knopfdruck zu
-einer fertigen `.jar` kompiliert.
+[Deutsch](README.de.md)
 
-Kein Java-Wissen nötig. Wer will, bekommt trotzdem ein sauberes Gradle-Projekt zum Weiterarbeiten.
+A visual editor that turns clicked-together items, blocks, tools, armour and recipes into a complete
+**NeoForge mod project for Minecraft 1.21.1** — and compiles it to a finished `.jar` in one click.
 
-![Die Mod-Seite von ModForge](docs/mod.png)
+No Java required. You still get a clean Gradle project if you want to keep working by hand.
 
-## Was rauskommt
+> **Note on language:** the editor's interface is currently German only. Everything it *generates* —
+> Java code, JSON, `en_us` language files — is English. Translating the UI is
+> [a good first contribution](#contributing).
 
-Aus einer Beschreibung entstehen unter anderem:
+![The mod page of ModForge](docs/mod.png)
 
-- `build.gradle`, `settings.gradle`, `gradle.properties` und der Gradle-Wrapper
-- Java-Quellcode: Hauptklasse, `ModItems`, `ModBlocks`, `ModCreativeTabs`, `ModToolTiers`,
-  `ModArmorMaterials`, Brennstoff-Handler
-- Blockstates, Item- und Block-Modelle
-- Texturen als PNG — selbst gezeichnet oder automatisch erzeugt
-- Loot-Tables inkl. Glück- und Behutsamkeits-Varianten wie beim Diamanterz
-- Rezepte (Werkbank, formlos, Ofen und Schmelzofen), Werkzeug- und Rüstungsrezepte automatisch
-- Erz-Weltgenerierung: `configured_feature`, `placed_feature` und der passende NeoForge-`biome_modifier`
-- Block-Tags (`mineable/*`, `needs_*_tool`)
-- Sprachdateien `en_us` und `de_de`
+## What comes out
 
-## Erze, die auch wirklich vorkommen
+A single description produces, among other things:
 
-Ein Erzblock im Kreativmenü ist schnell gebaut — einer, der beim Graben auftaucht, nicht. Dafür
-braucht es drei aufeinander verweisende JSON-Dateien, und jeder Tippfehler darin führt zu genau
-demselben Ergebnis: Die Welt sieht aus wie immer, und niemand sagt einem, warum.
+- `build.gradle`, `settings.gradle`, `gradle.properties` and the Gradle wrapper
+- Java source: main class, `ModItems`, `ModBlocks`, `ModCreativeTabs`, `ModToolTiers`,
+  `ModArmorMaterials`, fuel handler
+- Blockstates, item and block models
+- Textures as PNG — hand-drawn or generated
+- Loot tables including Fortune and Silk Touch variants, the way diamond ore does it
+- Recipes (crafting table, shapeless, furnace and blast furnace); tool and armour recipes automatically
+- Ore worldgen: `configured_feature`, `placed_feature` and the matching NeoForge `biome_modifier`
+- Block tags (`mineable/*`, `needs_*_tool`)
+- Language files `en_us` and `de_de`
 
-ModForge schreibt diese Kette selbst und bietet die Vanilla-Werte als Vorlage an — „Wie Eisen“,
-„Wie Diamant“, „Wie Smaragd“. Daneben steht eine Schätzung, wie viele Blöcke pro Chunk dabei
-herauskommen, verglichen mit echten Erzen.
+## Ore that actually spawns
 
-![Erz-Einstellungen mit Vorlagen und Häufigkeits-Schätzung](docs/blocks.png)
+An ore block in the creative menu is easy. One that shows up while you're mining is not. It takes
+three JSON files pointing at each other, and any typo among them produces the exact same result:
+the world looks like it always did, and nothing tells you why.
 
-## Die Prüfung vor dem Bauen
+ModForge writes that chain for you and offers the vanilla numbers as starting points — *like iron*,
+*like diamond*, *like emerald*. Next to them sits an estimate of how many blocks per chunk you'll
+actually get, compared against real ores.
 
-Minecraft lädt fehlerhafte Mods oft klaglos und lässt einfach etwas weg. ModForge prüft deshalb
-vorher und erklärt jeden Fund, statt nur eine Zeilennummer zu nennen:
+![Ore settings with presets and a rarity estimate](docs/blocks.png)
 
-- Erz-Höhen außerhalb der Dimension — im Nether liegt über Y 127 die Bedrock-Decke
-- vertauschte Minimal- und Maximalhöhe
-- Erz ohne Drop, Blöcke, die nur mit Werkzeug abbaubar sind, aber keines zulassen
-- doppelte IDs, unbekannte Zutaten, leere Rezepte, ungültige Mod-IDs
+## The check before the build
 
-Fehler blockieren den Build, Warnungen nicht.
+Minecraft loads broken mods without complaining and quietly drops whatever it didn't understand. So
+ModForge checks first, and explains every finding instead of printing a line number:
 
-![Die Bauen-Seite mit Prüfergebnis](docs/build.png)
+- ore heights outside the dimension — above Y 127 the Nether has its bedrock ceiling
+- minimum and maximum height swapped
+- ore that drops nothing; blocks that need a tool but permit none
+- duplicate ids, unknown ingredients, empty recipes, invalid mod ids
 
-## Loslegen
+Errors block the build. Warnings don't.
+
+![The build page showing the check result](docs/build.png)
+
+## Getting started
 
 ```bash
 npm install
 npm run dev
 ```
 
-Dann <http://localhost:5173> öffnen. Der Button **Beispiel laden** füllt alles mit einer
-funktionierenden Demo-Mod.
+Open <http://localhost:5173>. The **Beispiel laden** button fills everything with a working demo mod.
 
-Zum Kompilieren wird ein **JDK 21** gebraucht. ModForge sucht selbst in den üblichen Pfaden; sonst
-hilft:
+Compiling needs a **JDK 21**. ModForge looks in the usual places on its own; otherwise:
 
 ```bash
-export MODFORGE_JAVA_HOME=/pfad/zum/jdk21
+export MODFORGE_JAVA_HOME=/path/to/jdk21
 ```
 
-Ohne JDK funktioniert weiterhin der ZIP-Export.
+Without a JDK the ZIP export still works.
 
-## Bedienung
+## The editor
 
-| Bereich   | Inhalt                                                           |
-| --------- | ---------------------------------------------------------------- |
-| Mod       | Name, ID, Version, Autor, Kreativ-Tab                            |
-| Items     | Stapelgröße, Seltenheit, Tooltips, Nahrung, Brennstoff, Glitzern |
-| Blöcke    | Härte, Werkzeugstufe, Licht, Geräusch, Drops, XP, Weltgenerierung |
-| Werkzeuge | Ein Set erzeugt Spitzhacke, Axt, Schaufel, Hacke und Schwert      |
-| Rüstung   | Helm bis Stiefel samt der beiden getragenen Ebenen               |
-| Rezepte   | Werkbank (3×3), formlos und Ofen                                 |
-| Bauen     | Prüfung, ZIP-Export und `.jar`-Build mit Live-Log                |
+| Section   | Contents                                                          |
+| --------- | ----------------------------------------------------------------- |
+| Mod       | name, id, version, author, creative tab                           |
+| Items     | stack size, rarity, tooltips, food, fuel, enchantment glint       |
+| Blocks    | hardness, tool tier, light, sound, drops, XP, worldgen            |
+| Tools     | one set yields pickaxe, axe, shovel, hoe and sword                |
+| Armour    | helmet through boots including both worn layers                   |
+| Recipes   | crafting table (3×3), shapeless and furnace                       |
+| Build     | validation, ZIP export and `.jar` build with a live log           |
 
-Texturen entstehen im eingebauten Pixel-Editor (16×16, Rüstungsebenen 64×32). Ohne eigene Zeichnung
-erzeugt ModForge aus der ID eine deterministische Platzhalter-Grafik, damit nie ein Modell fehlt.
+Textures are drawn in the built-in pixel editor (16×16, armour layers 64×32). Without your own
+drawing, ModForge derives a deterministic placeholder from the id so a model is never missing.
 
-Die Arbeit wird automatisch im Browser gesichert. **Speichern** legt die Beschreibung als
-`.modforge.json` ab, **Öffnen** lädt sie zurück. Der geöffnete Bereich steht in der Adresszeile,
-ein Neuladen landet also wieder dort.
+Your work is autosaved in the browser. **Speichern** writes the description to a `.modforge.json`
+file, **Öffnen** reads it back. The open section lives in the address bar, so a reload returns you
+to the same place.
 
-## Mod installieren
+## Installing the mod
 
-Die gebaute `.jar` in den `mods`-Ordner einer Minecraft-Installation mit NeoForge für 1.21.1 legen.
+Drop the built `.jar` into the `mods` folder of a Minecraft installation running NeoForge for 1.21.1.
 
-## Aufbau
+## Layout
 
 ```
-src/core/      Generator — läuft identisch in Node und im Browser
-  spec.ts        Zod-Schema, die einzige Wahrheit über eine Mod
+src/core/      Generator — runs identically in Node and in the browser
+  spec.ts        Zod schema, the single source of truth about a mod
   generator/     gradle.ts, java.ts, resources.ts
-  png.ts         PNG-Encoder ohne Abhängigkeiten
-  textures.ts    Platzhalter-Grafiken
-src/server/    Fastify: Validieren, ZIP-Export, Gradle-Build mit Log-Stream
-src/ui/        React-Oberfläche
-mdk/1.21.1/    Gradle-Wrapper aus dem offiziellen MDK
+  png.ts         dependency-free PNG encoder
+  textures.ts    placeholder graphics
+src/server/    Fastify: validation, ZIP export, Gradle build with a log stream
+src/ui/        React interface
+mdk/1.21.1/    Gradle wrapper from the official MDK
 test/          Vitest
 ```
 
-Der Generator hängt an keiner Browser- oder Node-API, deshalb kann die Oberfläche dieselbe Vorschau
-rechnen, die der Server später auf die Platte schreibt.
+The generator touches no browser or Node API, which is why the interface can compute the very same
+preview the server later writes to disk.
 
-## Befehle
+## Commands
 
 ```bash
-npm run dev        # Server und Oberfläche zusammen
+npm run dev        # server and interface together
 npm test           # Vitest
 npm run typecheck  # tsc --noEmit
-npm run build      # Oberfläche für den Produktivbetrieb bauen
-npm start          # Server allein (liefert dist/ mit aus, wenn vorhanden)
+npm run build      # build the interface for production
+npm start          # server alone (also serves dist/ if present)
 ```
 
-`npx tsx scripts/build-demo.ts [ordner]` erzeugt die Demo-Mod und baut sie direkt durch — praktisch,
-um den Generator ohne Oberfläche zu prüfen. `npx tsx scripts/screenshots.ts` erneuert die Bilder in
-`docs/` (braucht einen laufenden `npm run dev`).
+`npx tsx scripts/build-demo.ts [dir]` generates the demo mod and builds it end to end — handy for
+exercising the generator without the interface. `npx tsx scripts/screenshots.ts` refreshes the
+images in `docs/` (needs `npm run dev` running).
 
-## Mitarbeiten
+## Contributing
 
-Fehlerberichte und Pull Requests sind willkommen. Zwei Hausregeln:
+Bug reports and pull requests are welcome. Translating the interface to English is the most useful
+thing anyone could pick up right now. Two house rules:
 
-1. **Minecraft-APIs und JSON-Formate nie aus dem Gedächtnis schreiben.** Sie ändern sich zwischen
-   Versionen still, und falsche Felder werden beim Laden kommentarlos verworfen. Gegen die echte
-   Client-Jar und die entpackten NeoForge-Quellen prüfen.
-2. **Jede Änderung am Generator braucht einen Test** und einen echten Durchlauf von
-   `npx tsx scripts/build-demo.ts`. Dass TypeScript kompiliert, sagt nichts darüber, ob Minecraft
-   die Dateien mag.
+1. **Never write Minecraft APIs or JSON formats from memory.** They change quietly between versions,
+   and wrong fields are discarded without a word at load time. Check against the real client jar and
+   the extracted NeoForge sources.
+2. **Every generator change needs a test** and a real run of `npx tsx scripts/build-demo.ts`. That
+   TypeScript compiles says nothing about whether Minecraft likes the files.
 
-## Lizenz
+## Licence
 
-ModForge steht unter der [MIT-Lizenz](LICENSE).
+ModForge is [MIT licensed](LICENSE).
 
-**Was du damit baust, gehört dir.** Auf generierte Mods erhebt dieses Projekt keinerlei Anspruch —
-kein Namensnennungszwang, keine Auflagen für Veröffentlichung oder Verkauf, egal ob auf CurseForge,
-Modrinth oder privat. Der erzeugte Java-Code und die erzeugten Ressourcen stehen ohne Bedingungen
-zu deiner freien Verfügung.
+**What you build with it is yours.** This project claims nothing over generated mods — no attribution
+requirement, no conditions on releasing or selling them, whether on CurseForge, Modrinth or privately.
+The generated Java code and resources are yours to use without strings attached.
 
-## Versionen
+## Versions
 
 Minecraft 1.21.1 · NeoForge 21.1.250 · ModDevGradle 2.0.147 · Java 21
